@@ -9,8 +9,7 @@ const bcrypt = require('bcrypt');
 
 router.post('/signup', (req, res) => {
   if (!checkBody(req.body, ['username', 'password'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
-    return;
+    return res.json({ result: false, error: 'Missing or empty fields' });
   }
 
   // Check if the user has not already been registered
@@ -26,26 +25,36 @@ router.post('/signup', (req, res) => {
       });
 
       newUser.save().then(newDoc => {
-        res.json({ result: true, token: newDoc.token });
+        return res.json({
+          result: true,
+          username: newDoc.username,
+          token: newDoc.token,
+        });
       });
     } else {
       // User already exists in database
-      res.json({ result: false, error: 'User already exists' });
+      return res.json({ result: false, error: 'User already exists' });
     }
   });
 });
 
 router.post('/signin', (req, res) => {
   if (!checkBody(req.body, ['username', 'password'])) {
-    res.json({ result: false, error: 'Missing or empty fields' });
-    return;
+    return res.json({ result: false, error: 'Missing or empty fields' });
   }
 
   User.findOne({ username: req.body.username }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) {
-      res.json({ result: true, token: data.token });
+      return res.json({
+        result: true,
+        username: data.username,
+        token: data.token,
+      });
     } else {
-      res.json({ result: false, error: 'User not found or wrong password' });
+      return res.json({
+        result: false,
+        error: 'User not found or wrong password',
+      });
     }
   });
 });
@@ -53,9 +62,9 @@ router.post('/signin', (req, res) => {
 router.get('/canBookmark/:token', (req, res) => {
   User.findOne({ token: req.params.token }).then(data => {
     if (data) {
-      res.json({ result: true, canBookmark: data.canBookmark });
+      return res.json({ result: true, canBookmark: data.canBookmark });
     } else {
-      res.json({ result: false, error: 'User not found' });
+      return res.json({ result: false, error: 'User not found' });
     }
   });
 });
