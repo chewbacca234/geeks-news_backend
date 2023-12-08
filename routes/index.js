@@ -15,7 +15,6 @@ router.get('/sources', (_, res) => {
       return response.json();
     })
     .then(data => {
-      console.log('data', data);
       if (data.status === 'ok') {
         return res.json(data);
       } else {
