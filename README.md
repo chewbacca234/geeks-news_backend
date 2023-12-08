@@ -1,3 +1,3 @@
-# morningnews_backend
+# Geeks News | Backend
 
-Backend part of the web application Morning News
+Backend part of the web application Geeks News
