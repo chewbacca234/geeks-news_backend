@@ -25,6 +25,8 @@ router.post('/signup', (req, res) => {
         password: hash,
         token: uid2(32),
         canBookmark: true,
+        hiddenArticles: req.body.hiddenArticles,
+        sources: req.body.sources,
       });
 
       // If all ok save new user & return username & token
@@ -58,6 +60,8 @@ router.post('/signin', (req, res) => {
         result: true,
         username: data.username,
         token: data.token,
+        hiddenArticles: data.hiddenArticles,
+        bookmarks: data.bookmarks,
       });
     } else {
       // If user doesn't exists in database or wrong password return error message
@@ -68,6 +72,22 @@ router.post('/signin', (req, res) => {
     }
   });
 });
+
+/* PUT Update user's bookmarks, selected sources & hidden articles */
+router.put('/update', (req, res) => {
+  User.findOneAndUpdate(
+    { username: req.body.username },
+    {
+      bookmarks: req.body.bookmarks,
+      hiddenArticles: req.body.hiddenArticles,
+      sources: req.body.sources,
+    }
+  ).then(data => {
+    return res.json({ result: true, data });
+  });
+});
+
+// TODO: Get user's preferences at signin.
 
 /* GET User can bookmark status */
 router.get('/canBookmark/:token', (req, res) => {
