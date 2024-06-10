@@ -62,6 +62,7 @@ router.post('/signin', (req, res) => {
         token: data.token,
         hiddenArticles: data.hiddenArticles,
         bookmarks: data.bookmarks,
+        sources: data.sources,
       });
     } else {
       // If user doesn't exists in database or wrong password return error message
@@ -86,8 +87,6 @@ router.put('/update', (req, res) => {
     return res.json({ result: true, data });
   });
 });
-
-// TODO: Get user's preferences at signin.
 
 /* GET User can bookmark status */
 router.get('/canBookmark/:token', (req, res) => {
